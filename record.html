@@ -43,12 +43,17 @@
             th.textContent = key;
             tableHead.appendChild(th);
           });
+const th2 = document.createElement("th");
+            th2.textContent = 'Percent%';
+            tableHead.appendChild(th2);
 
+          
           const tableBody = document.getElementById("tableBody");
           tableBody.innerHTML = "";
           data.forEach(record => {
             const row = document.createElement("tr");
-            var pp = record[0]/record[1];
+            console.log(Object.values(record));
+            var pp = Object.values(record)[0]/Object.values(record)[1];
             Object.values(record).forEach(value => {
               const td = document.createElement("td");
               td.textContent = value;
@@ -67,5 +72,6 @@
   </script>
 </body>
 </html>
+
 
 
