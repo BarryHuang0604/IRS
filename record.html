@@ -33,9 +33,9 @@
             alert("目前沒有紀錄");
             return;
           }
-
-          document.getElementById("recordTable").style.display = "table";
-
+          
+          document.getElementById("recordTable").style.display = "table"
+            
           const tableHead = document.getElementById("tableHead");
           tableHead.innerHTML = "";
           Object.keys(data[0]).forEach(key => {
@@ -48,11 +48,15 @@
           tableBody.innerHTML = "";
           data.forEach(record => {
             const row = document.createElement("tr");
+            var pp = record[0]/record[1];
             Object.values(record).forEach(value => {
               const td = document.createElement("td");
               td.textContent = value;
               row.appendChild(td);
             });
+            const td2 = document.createElement("td");
+            td2.textContent = pp;
+              row.appendChild(td2);
             tableBody.appendChild(row);
           });
         })
@@ -63,4 +67,5 @@
   </script>
 </body>
 </html>
+
 
