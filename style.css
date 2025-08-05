@@ -1,0 +1,60 @@
+/* 背景與整體排版 */
+body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* 主要內容框 */
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* 標題 */
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* 按鈕區 */
+button {
+  padding: 12px 24px;
+  font-size: 16px;
+  margin: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background: #4CAF50;
+  color: white;
+  transition: 0.2s;
+}
+button:hover {
+  background: #45a049;
+}
+
+/* 表格樣式 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th, td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #f0f0f0;
+}
+
+/* 表格隱藏 */
+#recordTable {
+  display: none;
+}
