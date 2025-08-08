@@ -17,13 +17,17 @@
   </div>
 
   <script>
-    document.getElementById("startBtn").addEventListener("click", () => {
-      alert("開始復健功能尚未開發！");
+    function send() {
+    fetch("http://192.168.43.50/?btn=1") // 改成你的 Arduino IP
+    .then(res => res.text())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
       // 或者你可以改跳轉 rehab.html
       // window.location.href = "rehab.html";
     });
   </script>
 </body>
 </html>
+
 
 
