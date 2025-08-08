@@ -17,17 +17,20 @@
   </div>
 
   <script>
-    function send() {
-    fetch("http://192.168.43.50/?btn=1") // 改成你的 Arduino IP
-    .then(res => res.text())
-    .then(data => console.log(data))
-    .catch(err => console.error(err));
-      // 或者你可以改跳轉 rehab.html
-      // window.location.href = "rehab.html";
+    // 取得按鈕元素
+    const startBtn = document.getElementById('startBtn');
+
+    // 綁定點擊事件
+    startBtn.addEventListener('click', () => {
+      fetch("http://192.168.43.50/?btn=1") // 改成你的 Arduino IP
+        .then(res => res.text())
+        .then(data => console.log("Arduino 回應:", data))
+        .catch(err => console.error("錯誤:", err));
     });
   </script>
 </body>
 </html>
+
 
 
 
