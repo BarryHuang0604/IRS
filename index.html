@@ -18,12 +18,17 @@
 
   <script>
     function sendSignal() {
-      fetch('http://192.168.1.177/button')
-        .then(res => console.log("已發送訊號"))
-        .catch(err => console.error(err));
+      fetch('http://192.168.1.177/on')
+        .then(response => {
+          if(response.ok) {
+            console.log("已發送訊號");
+          } else {
+            console.error("伺服器回應錯誤");
+          }
+        })
+        .catch(err => console.error("發送訊號失敗：", err));
     }
 
-    // 綁定按鈕點擊事件
     document.getElementById('startBtn').addEventListener('click', sendSignal);
   </script>
 </body>
