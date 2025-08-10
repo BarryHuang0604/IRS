@@ -17,20 +17,14 @@
   </div>
 
   <script>
-    // 取得按鈕元素
-    const startBtn = document.getElementById('startBtn');
+    function sendSignal() {
+      fetch('http://192.168.1.177/button')
+        .then(res => console.log("已發送訊號"))
+        .catch(err => console.error(err));
+    }
 
-    // 綁定點擊事件
-    startBtn.addEventListener('click', () => {
-      fetch("http://192.168.43.50/?btn=1") // 改成你的 Arduino IP
-        .then(res => res.text())
-        .then(data => console.log("Arduino 回應:", data))
-        .catch(err => console.error("錯誤:", err));
-    });
+    // 綁定按鈕點擊事件
+    document.getElementById('startBtn').addEventListener('click', sendSignal);
   </script>
 </body>
 </html>
-
-
-
-
