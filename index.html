@@ -21,19 +21,10 @@
       font-weight: bold;
       color: green;
     }
-    input {
-      padding: 8px;
-      font-size: 16px;
-      width: 250px;
-      margin-bottom: 20px;
-    }
   </style>
 </head>
 <body>
   <h1>Intelligent Rehabilitative Slider</h1>
-
-  <p>請輸入 Arduino IP：</p>
-  <input type="text" id="arduinoIP" placeholder="例如 192.168.1.177" />
 
   <div>
     <button onclick="sendCommand('START')">Start Rehabilitation</button>
@@ -43,13 +34,10 @@
   <div id="response"></div>
 
   <script>
+    const arduinoIP = '172.20.10.3';  // 固定 Arduino IP
+
     function sendCommand(cmd) {
-      const ip = document.getElementById('arduinoIP').value.trim();
-      if (!ip) {
-        alert('請先輸入 Arduino 的 IP 位址！');
-        return;
-      }
-      const url = `http://${ip}/?command=${cmd}`;
+      const url = `http://${arduinoIP}/?command=${cmd}`;
       fetch(url)
         .then(response => response.text())
         .then(data => {
