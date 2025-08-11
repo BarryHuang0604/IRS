@@ -2,42 +2,33 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>Arduino Uno R4 WiFi 測試頁面</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      text-align: center;
-    }
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    #response {
-      margin-top: 20px;
-      font-weight: bold;
-      color: green;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Intelligent Rehabilitative Slider</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Arduino Uno R4 WiFi 測試頁面</h1>
-  <button onclick="sendRequest()">按我發送請求</button>
-  <div id="response"></div>
+  <div class="container">
+    <h1>Intelligent Rehabilitative Slider</h1>
+
+    <div style="text-align: center;">
+      <button onclick="sendCommand('START')">Start Rehabilitation</button>
+      <a href="record.html"><button>Rehabilitation Record</button></a>
+    </div>
+
+    <div id="response" style="margin-top:20px; text-align:center; color: green;"></div>
+  </div>
 
   <script>
-    function sendRequest() {
-      fetch('/')
+    function sendCommand(cmd) {
+      fetch('/?command=' + cmd)
         .then(response => response.text())
         .then(data => {
-          document.getElementById('response').innerText = '回應內容：' + data;
+          document.getElementById('response').innerText = 'Arduino 回應：' + data;
         })
         .catch(err => {
-          document.getElementById('response').innerText = '連線失敗：' + err;
+          document.getElementById('response').innerText = '連線錯誤：' + err;
         });
     }
   </script>
 </body>
 </html>
-
