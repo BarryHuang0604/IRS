@@ -11,26 +11,23 @@
     <h1>Intelligent Rehabilitative Slider</h1>
 
     <div style="text-align: center;">
-      <button id="startBtn">Start Rehabilitation</button>
+      <button onclick="sendCommand('START')">Start Rehabilitation</button>
       <a href="record.html"><button>Rehabilitation Record</button></a>
     </div>
   </div>
 
   <script>
-    function sendSignal() {
-      fetch('http://172.20.10.3/on')
-        .then(response => {
-          if(response.ok) {
-            console.log("已發送訊號");
-          } else {
-            console.error("伺服器回應錯誤");
-          }
-        })
-        .catch(err => console.error("發送訊號失敗：", err));
-    }
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyTQtAmEleiPPnWSXuJeHWo_YG7pju28_RsqhWgTiuWMQ0l-ZafWTbTcevFZjRroEyh/exec"; // 換成你GAS的網址
 
-    document.getElementById('startBtn').addEventListener('click', sendSignal);
+    function sendCommand(cmd) {
+      fetch(`${GAS_URL}?action=${cmd}`)
+        .then(res => res.text())
+        .then(txt => {
+          console.log(txt);
+          alert("已送出指令: " + cmd);
+        })
+        .catch(err => console.error("發送失敗", err));
+    }
   </script>
 </body>
 </html>
-
