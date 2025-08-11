@@ -1,51 +1,27 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Intelligent Rehabilitative Slider</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      text-align: center;
-    }
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      cursor: pointer;
-      margin: 10px;
-    }
-    #response {
-      margin-top: 20px;
-      font-weight: bold;
-      color: green;
-    }
-  </style>
+  <title>Smart Rehabilitation Hand Slider</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Intelligent Rehabilitative Slider</h1>
+  <div class="container">
+    <h1>Smart Rehabilitation Hand Slider</h1>
 
-  <div>
-    <button onclick="sendCommand('START')">開始復健</button>
-    <button onclick="sendCommand('STOP')">停止復健</button>
+    <div style="text-align: center;">
+      <button id="startBtn">Start Rehab</button>
+      <a href="record.html"><button>View Records</button></a>
+    </div>
   </div>
 
-  <div id="response"></div>
-
   <script>
-    function sendCommand(cmd) {
-  const url = `https://script.google.com/macros/s/AKfycbzOG37tDat06Q1WSmZJ9JKUKtofjqnR55zv6gLuAfXizP1ySTCwhw3X4q5FZFTlcUE/exec?action=set&cmd=${cmd}`;
-  fetch(url)
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById('response').innerText = '雲端回應：' + data;
-    })
-    .catch(err => {
-      document.getElementById('response').innerText = '連線錯誤：' + err;
+    document.getElementById("startBtn").addEventListener("click", () => {
+      alert("The rehab function is not yet developed!");
+      // Or you can redirect to rehab.html
+      // window.location.href = "rehab.html";
     });
-}
   </script>
 </body>
 </html>
-
