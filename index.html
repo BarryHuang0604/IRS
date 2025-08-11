@@ -35,16 +35,17 @@
 
   <script>
     function sendCommand(cmd) {
-      const url = `http://172.20.10.3/?command=${cmd}`;
-      fetch(url)
-        .then(response => response.text())
-        .then(data => {
-          document.getElementById('response').innerText = 'Arduino 回應：' + data;
-        })
-        .catch(err => {
-          document.getElementById('response').innerText = '連線錯誤：' + err;
-        });
-    }
+  const url = `https://script.google.com/macros/s/AKfycbzOG37tDat06Q1WSmZJ9JKUKtofjqnR55zv6gLuAfXizP1ySTCwhw3X4q5FZFTlcUE/exec?action=set&cmd=${cmd}`;
+  fetch(url)
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('response').innerText = '雲端回應：' + data;
+    })
+    .catch(err => {
+      document.getElementById('response').innerText = '連線錯誤：' + err;
+    });
+}
   </script>
 </body>
 </html>
+
