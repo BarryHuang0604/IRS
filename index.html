@@ -18,9 +18,19 @@
 
   <script>
     document.getElementById("startBtn").addEventListener("click", () => {
-      alert("The rehab function is not yet developed!");
-      // Or you can redirect to rehab.html
-      // window.location.href = "rehab.html";
+      fetch("http://172.20.10.3/start")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Failed to connect to Arduino");
+          }
+          return response.text();
+        })
+        .then(data => {
+          alert("Rehab started! Arduino received the command.");
+        })
+        .catch(error => {
+          alert("Error: " + error.message);
+        });
     });
   </script>
 </body>
