@@ -27,17 +27,15 @@
   <h1>Intelligent Rehabilitative Slider</h1>
 
   <div>
-    <button onclick="sendCommand('START')">Start Rehabilitation</button>
-    <button onclick="sendCommand('STOP')">Stop Rehabilitation</button>
+    <button onclick="sendCommand('START')">開始復健</button>
+    <button onclick="sendCommand('STOP')">停止復健</button>
   </div>
 
   <div id="response"></div>
 
   <script>
-    const arduinoIP = '172.20.10.3';  // 固定 Arduino IP
-
     function sendCommand(cmd) {
-      const url = `http://${arduinoIP}/?command=${cmd}`;
+      const url = `http://172.20.10.3/?command=${cmd}`;
       fetch(url)
         .then(response => response.text())
         .then(data => {
