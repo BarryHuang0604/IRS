@@ -4,31 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Intelligent Rehabilitative Slider</title>
-  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Intelligent Rehabilitative Slider</h1>
 
     <div style="text-align: center;">
-      <button onclick="sendCommand('START')">Start Rehabilitation</button>
+      <button id="startBtn">Start Rehabilitation</button>
       <a href="record.html"><button>Rehabilitation Record</button></a>
     </div>
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzWwHy1JjZA3eh1DKAhaWh5Gw9MjIET7t-2VyNft11Qy8zwooKh_ZRSvBLNGvfc3sDE/exec"; // 換成你GAS的網址
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwOK8_AmiH85lzFXE2jCFKbOCwKqkblHt_XCUk8S87Q5DoOWpGNKfcivgzrFsHy-ry8/exec"; 
+    let hasSent = false;
 
-    function sendCommand(cmd) {
-      fetch(`${GAS_URL}?action=${cmd}`)
+    document.getElementById('startBtn').addEventListener('click', () => {
+      if (hasSent) return;
+      hasSent = true;
+      document.getElementById('startBtn').disabled = true;
+
+      fetch(`${GAS_URL}?action=START`)
         .then(res => res.text())
         .then(txt => {
           console.log(txt);
-          alert("已送出指令: " + cmd);
+          alert("已送出指令: START");
         })
         .catch(err => console.error("發送失敗", err));
-    }
+    });
   </script>
 </body>
 </html>
-
