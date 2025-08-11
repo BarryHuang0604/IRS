@@ -2,32 +2,42 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Intelligent Rehabilitative Slider</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Arduino Uno R4 WiFi 測試頁面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      text-align: center;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    #response {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Intelligent Rehabilitative Slider</h1>
-
-    <div style="text-align: center;">
-      <button onclick="sendCommand('START')">Start Rehabilitation</button>
-      <a href="record.html"><button>Rehabilitation Record</button></a>
-    </div>
-  </div>
+  <h1>Arduino Uno R4 WiFi 測試頁面</h1>
+  <button onclick="sendRequest()">按我發送請求</button>
+  <div id="response"></div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwOK8_AmiH85lzFXE2jCFKbOCwKqkblHt_XCUk8S87Q5DoOWpGNKfcivgzrFsHy-ry8/exec"; // 換成你GAS的網址
-
-    function sendCommand(cmd) {
-      fetch(`${GAS_URL}?action=${cmd}`)
-        .then(res => res.text())
-        .then(txt => {
-          console.log(txt);
-          alert("已送出指令: " + cmd);
+    function sendRequest() {
+      fetch('/')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('response').innerText = '回應內容：' + data;
         })
-        .catch(err => console.error("發送失敗", err));
+        .catch(err => {
+          document.getElementById('response').innerText = '連線失敗：' + err;
+        });
     }
   </script>
 </body>
 </html>
+
