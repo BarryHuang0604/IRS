@@ -4,23 +4,53 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Intelligent Rehabilitative Slider</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      text-align: center;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    #response {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+    input {
+      padding: 8px;
+      font-size: 16px;
+      width: 250px;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Intelligent Rehabilitative Slider</h1>
+  <h1>Intelligent Rehabilitative Slider</h1>
 
-    <div style="text-align: center;">
-      <button onclick="sendCommand('START')">Start Rehabilitation</button>
-      <a href="record.html"><button>Rehabilitation Record</button></a>
-    </div>
+  <p>請輸入 Arduino IP：</p>
+  <input type="text" id="arduinoIP" placeholder="例如 192.168.1.177" />
 
-    <div id="response" style="margin-top:20px; text-align:center; color: green;"></div>
+  <div>
+    <button onclick="sendCommand('START')">Start Rehabilitation</button>
+    <button onclick="sendCommand('STOP')">Stop Rehabilitation</button>
   </div>
+
+  <div id="response"></div>
 
   <script>
     function sendCommand(cmd) {
-      fetch('/?command=' + cmd)
+      const ip = document.getElementById('arduinoIP').value.trim();
+      if (!ip) {
+        alert('請先輸入 Arduino 的 IP 位址！');
+        return;
+      }
+      const url = `http://${ip}/?command=${cmd}`;
+      fetch(url)
         .then(response => response.text())
         .then(data => {
           document.getElementById('response').innerText = 'Arduino 回應：' + data;
