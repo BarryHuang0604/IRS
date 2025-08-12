@@ -17,19 +17,7 @@
 
   <script>
     document.getElementById("stopBtn").addEventListener("click", () => {
-      fetch("http://172.20.10.3/stop")
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Failed to connect to Arduino");
-          }
-          return response.text();
-        })
-        .then(data => {
-          alert("Rehab stopped! Arduino received the command.");
-        })
-        .catch(error => {
-          alert("Error: " + error.message);
-        });
+      alert("Rehabilitation has been recorded");
     });
   </script>
 </body>
