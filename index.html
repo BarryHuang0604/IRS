@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Smart Rehabilitation Hand Slider</title>
+  <title>Start Rehabilitation</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Smart Rehabilitation Hand Slider</h1>
+    <h1>Rehabilitation In Progress</h1>
 
     <div style="text-align: center;">
-      <button id="startBtn">Start Rehab</button>
-      <a href="record.html"><button>View Records</button></a>
+      <button id="stopBtn" style="background-color: red; color: white; padding: 10px 20px; font-size: 16px;">Stop Rehab</button>
     </div>
   </div>
 
   <script>
-    document.getElementById("startBtn").addEventListener("click", () => {
-      fetch("http://172.20.10.3/start")
+    document.getElementById("stopBtn").addEventListener("click", () => {
+      fetch("http://172.20.10.3/stop")
         .then(response => {
           if (!response.ok) {
             throw new Error("Failed to connect to Arduino");
@@ -26,7 +25,7 @@
           return response.text();
         })
         .then(data => {
-          alert("Rehab started! Arduino received the command.");
+          alert("Rehab stopped! Arduino received the command.");
         })
         .catch(error => {
           alert("Error: " + error.message);
