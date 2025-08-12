@@ -10,8 +10,9 @@
   <div class="container">
     <h1>Rehabilitation In Progress</h1>
 
-    <div style="text-align: center;">
-      <button id="stopBtn" style="background-color: red; color: white; padding: 10px 20px; font-size: 16px;">Stop Rehab</button>
+    <div style="text-align: center; margin-top: 20px;">
+      <button id="stopBtn" style="background-color: red; color: white; padding: 10px 20px; font-size: 16px; margin-right: 10px;">Stop Rehab</button>
+      <button id="backBtn" style="background-color: gray; color: white; padding: 10px 20px; font-size: 16px;">Back to Homepage</button>
     </div>
   </div>
 
@@ -19,6 +20,10 @@
     document.getElementById("stopBtn").addEventListener("click", () => {
       alert("Rehabilitation has been recorded");
       window.location.href = "index.html"; // 回首頁
+    });
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      window.location.href = "index.html"; // 直接回首頁
     });
   </script>
 </body>
