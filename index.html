@@ -1,20 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Smart Rehabilitation Hand Slider</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 燈控制</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 50px; background: #f0f0f0; }
+    button { padding: 15px 30px; font-size: 18px; margin: 10px; cursor: pointer; border-radius: 8px; border: none; }
+    #startBtn { background-color: #4CAF50; color: white; }
+    #stopBtn { background-color: #f44336; color: white; }
+    #ledStatus { margin-top: 30px; font-size: 24px; font-weight: bold; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Intelligent Rehabilitative Slider</h1>
+  <h1>ESP32 燈控制</h1>
+  <button id="startBtn">開始</button>
+  <button id="stopBtn">停止</button>
+  <div id="ledStatus">LED 狀態：未知</div>
 
-    <div style="text-align: center;">
-      <a href="start.html"><button id="startBtn">Start Rehab</button></a>
-      <a href="record.html"><button>View Records</button></a>
-    </div>
-  </div>
+  <script>
+    const firebaseURL = "https://test-cd0d6-default-rtdb.firebaseio.com/status.json";
+
+    // 按鈕事件
+    document.getElementById("startBtn").addEventListener("click", () => {
+      fetch(firebaseURL, { method: "PUT", body: JSON.stringify("start") });
+    });
+
+    document.getElementById("stopBtn").addEventListener("click", () => {
+      fetch(firebaseURL, { method: "PUT", body: JSON.stringify("stop") });
+    });
+
+    // 輪詢更新 LED 狀態（每0.5秒）
+    setInterval(() => {
+      fetch(firebaseURL)
+        .then(res => res.json())
+        .then(status => {
+          const div = document.getElementById("ledStatus");
+          if (status === "start") { div.textContent = "LED 狀態：亮"; div.style.color = "green"; }
+          else if (status === "stop") { div.textContent = "LED 狀態：滅"; div.style.color = "red"; }
+          else { div.textContent = "LED 狀態：未知"; div.style.color = "black"; }
+        });
+    }, 500);
+  </script>
 </body>
 </html>
 
