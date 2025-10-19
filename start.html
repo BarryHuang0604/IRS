@@ -1,46 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESP32 燈控制</title>
-  <style>
-    body { font-family: Arial; text-align: center; padding: 50px; background: #f0f0f0; }
-    button { padding: 15px 30px; font-size: 18px; margin: 10px; cursor: pointer; border-radius: 8px; border: none; }
-    #startBtn { background-color: #4CAF50; color: white; }
-    #stopBtn { background-color: #f44336; color: white; }
-    #ledStatus { margin-top: 30px; font-size: 24px; font-weight: bold; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Start Rehabilitation</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>ESP32 燈控制</h1>
-  <button id="startBtn">開始</button>
-  <button id="stopBtn">停止</button>
-  <div id="ledStatus">LED 狀態：未知</div>
+  <div class="container">
+    <h1>Rehabilitation In Progress</h1>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <button id="stopBtn" style="background-color: red; color: white; padding: 10px 20px; font-size: 16px; margin-right: 10px;">Stop Rehab</button>
+      <button id="backBtn" style="background-color: gray; color: white; padding: 10px 20px; font-size: 16px;">Back to Homepage</button>
+    </div>
+  </div>
 
   <script>
-    const firebaseURL = "https://test-cd0d6-default-rtdb.firebaseio.com/status.json";
-
-    // 按鈕事件
-    document.getElementById("startBtn").addEventListener("click", () => {
-      fetch(firebaseURL, { method: "PUT", body: JSON.stringify("start") });
-    });
-
     document.getElementById("stopBtn").addEventListener("click", () => {
-      fetch(firebaseURL, { method: "PUT", body: JSON.stringify("stop") });
+      alert("Rehabilitation has been recorded");
+      window.location.href = "index.html"; // 回首頁
     });
 
-    // 輪詢更新 LED 狀態（每0.5秒）
-    setInterval(() => {
-      fetch(firebaseURL)
-        .then(res => res.json())
-        .then(status => {
-          const div = document.getElementById("ledStatus");
-          if (status === "start") { div.textContent = "LED 狀態：亮"; div.style.color = "green"; }
-          else if (status === "stop") { div.textContent = "LED 狀態：滅"; div.style.color = "red"; }
-          else { div.textContent = "LED 狀態：未知"; div.style.color = "black"; }
-        });
-    }, 500);
+    document.getElementById("backBtn").addEventListener("click", () => {
+      window.location.href = "index.html"; // 直接回首頁
+    });
   </script>
 </body>
 </html>
