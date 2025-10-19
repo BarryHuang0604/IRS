@@ -92,25 +92,28 @@
 
     const leds = document.querySelectorAll(".led");
 
-    // 模擬：從 Firebase 讀取目前亮的燈（用 fetch 模擬）
+    // 從 Firebase 讀取燈號資料（ESP32 寫入 light: 0~7）
     async function fetchLightData() {
       try {
-        const response = await fetch("https://your-firebase-app.firebaseio.com/data.json");
+        const response = await fetch("https://test-cd0d6-default-rtdb.firebaseio.com/data.json");
         const data = await response.json();
-        const activeLight = data.light; // ESP32 上傳的燈號 0~7
-        leds.forEach((led, index) => {
-          if (index === activeLight) {
-            led.classList.add("active");
-          } else {
-            led.classList.remove("active");
-          }
-        });
+        const activeLight = data.light;
+
+        if (activeLight !== undefined && activeLight >= 0 && activeLight < numLeds) {
+          leds.forEach((led, index) => {
+            if (index === activeLight) {
+              led.classList.add("active");
+            } else {
+              led.classList.remove("active");
+            }
+          });
+        }
       } catch (error) {
-        console.error("Didn't connect：", error);
+        console.error("無法連線到 Firebase：", error);
       }
     }
 
-    // 開始復健流程
+    // --- 開始復健 ---
     startBtn.addEventListener("click", () => {
       let timeLeft = 5;
       titleEl.textContent = "Start in";
@@ -129,17 +132,20 @@
           ledRing.style.display = "block";
           stopBtn.style.display = "inline-block";
 
-          // 每1秒更新一次LED顯示
-          setInterval(fetchLightData, 1000);
+          // 每秒更新LED顯示
+          window.ledInterval = setInterval(fetchLightData, 100);
         }
-      }, 1000);
+      }, 100);
     });
 
+    // --- 停止復健 ---
     stopBtn.addEventListener("click", () => {
+      clearInterval(window.ledInterval);
       alert("Rehabilitation has been recorded");
       window.location.href = "index.html";
     });
 
+    // --- 返回首頁 ---
     backBtn.addEventListener("click", () => {
       window.location.href = "index.html";
     });
