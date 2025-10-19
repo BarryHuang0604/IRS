@@ -1,29 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Start Rehabilitation</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* 額外加的字體大小、顏色控制 */
+    #countdown {
+      font-size: 48px;
+      text-align: center;
+      color: #4CAF50;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #stopBtn {
+      background: #f44336;
+    }
+    #stopBtn:hover {
+      background: #d32f2f;
+    }
+
+    #backBtn {
+      background: #9e9e9e;
+    }
+    #backBtn:hover {
+      background: #7e7e7e;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Rehabilitation In Progress</h1>
+    <h1 id="title">準備開始復健？</h1>
 
-    <div style="text-align: center; margin-top: 20px;">
-      <button id="stopBtn" style="background-color: red; color: white; padding: 10px 20px; font-size: 16px; margin-right: 10px;">Stop Rehab</button>
-      <button id="backBtn" style="background-color: gray; color: white; padding: 10px 20px; font-size: 16px;">Back to Homepage</button>
+    <div style="text-align: center;">
+      <button id="startBtn">Start Rehab</button>
+      <button id="backBtn">Back to Homepage</button>
+      <button id="stopBtn" style="display:none;">Stop Rehab</button>
     </div>
+
+    <div id="countdown"></div>
   </div>
 
   <script>
-    document.getElementById("stopBtn").addEventListener("click", () => {
+    const startBtn = document.getElementById("startBtn");
+    const backBtn = document.getElementById("backBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const countdownEl = document.getElementById("countdown");
+    const titleEl = document.getElementById("title");
+
+    startBtn.addEventListener("click", () => {
+      let timeLeft = 5;
+      titleEl.textContent = "倒數開始...";
+      countdownEl.textContent = timeLeft;
+
+      // 隱藏開始與返回鈕
+      startBtn.style.display = "none";
+      backBtn.style.display = "none";
+
+      const timer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          countdownEl.textContent = "";
+          titleEl.textContent = "Rehabilitation In Progress";
+
+          stopBtn.style.display = "inline-block"; // 顯示停止鈕
+        }
+      }, 1000);
+    });
+
+    stopBtn.addEventListener("click", () => {
       alert("Rehabilitation has been recorded");
       window.location.href = "index.html"; // 回首頁
     });
 
-    document.getElementById("backBtn").addEventListener("click", () => {
-      window.location.href = "index.html"; // 直接回首頁
+    backBtn.addEventListener("click", () => {
+      window.location.href = "index.html"; // 回首頁
     });
   </script>
 </body>
