@@ -6,7 +6,6 @@
   <title>Start Rehabilitation</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* 額外加的字體大小、顏色控制 */
     #countdown {
       font-size: 48px;
       text-align: center;
@@ -32,7 +31,7 @@
 </head>
 <body>
   <div class="container">
-    <h1 id="title">準備開始復健？</h1>
+    <h1 id="title">Ready?</h1>
 
     <div style="text-align: center;">
       <button id="startBtn">Start Rehab</button>
@@ -52,10 +51,8 @@
 
     startBtn.addEventListener("click", () => {
       let timeLeft = 5;
-      titleEl.textContent = "倒數開始...";
+      titleEl.textContent = "Start in";
       countdownEl.textContent = timeLeft;
-
-      // 隱藏開始與返回鈕
       startBtn.style.display = "none";
       backBtn.style.display = "none";
 
