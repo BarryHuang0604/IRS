@@ -6,12 +6,35 @@
   <title>Rehabilitation Training</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #222;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 30px;
+    }
+
     #countdown {
       font-size: 48px;
-      text-align: center;
       color: #4CAF50;
       margin-top: 20px;
       font-weight: bold;
+    }
+
+    button {
+      background: #4CAF50;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
     }
 
     #stopBtn {
@@ -40,10 +63,9 @@
       position: absolute;
       width: 40px;
       height: 40px;
-      background: #ccc;
+      background: #555;
       border-radius: 50%;
-      transition: background 0.3s;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: background 0.2s, box-shadow 0.2s;
     }
 
     .led.active {
@@ -53,20 +75,16 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 id="title">Ready？</h1>
+  <h1 id="title">Ready？</h1>
 
-    <div style="text-align: center;">
-      <button id="startBtn">Start Rehab</button>
-      <button id="backBtn">Back to Homepage</button>
-      <button id="stopBtn" style="display:none;">Stop Rehab</button>
-    </div>
-
-    <div id="countdown"></div>
-
-    <!-- 燈圈 -->
-    <div class="led-ring" id="ledRing" style="display:none;"></div>
+  <div>
+    <button id="startBtn">Start Rehab</button>
+    <button id="backBtn">Back to Homepage</button>
+    <button id="stopBtn" style="display:none;">Stop Rehab</button>
   </div>
+
+  <div id="countdown"></div>
+  <div class="led-ring" id="ledRing" style="display:none;"></div>
 
   <script>
     const startBtn = document.getElementById("startBtn");
@@ -76,15 +94,17 @@
     const titleEl = document.getElementById("title");
     const ledRing = document.getElementById("ledRing");
 
-    // 建立8顆燈（排成圓形）
+    // 建立 8 顆燈（圓形配置）
     const numLeds = 8;
     const radius = 100;
+    const centerOffset = 105; // 讓圓圈置中更準
+
     for (let i = 0; i < numLeds; i++) {
       const led = document.createElement("div");
       led.classList.add("led");
-      const angle = (i / numLeds) * 2 * Math.PI;
-      const x = radius * Math.cos(angle) + radius + 40;
-      const y = radius * Math.sin(angle) + radius + 40;
+      const angle = (i / numLeds) * 2 * Math.PI - Math.PI / 2; // 從上方開始
+      const x = centerOffset + radius * Math.cos(angle);
+      const y = centerOffset + radius * Math.sin(angle);
       led.style.left = `${x}px`;
       led.style.top = `${y}px`;
       ledRing.appendChild(led);
@@ -97,19 +117,15 @@
       try {
         const response = await fetch("https://test-cd0d6-default-rtdb.firebaseio.com/data.json");
         const data = await response.json();
-        const activeLight = data.light;
+        const activeLight = data?.light;
 
         if (activeLight !== undefined && activeLight >= 0 && activeLight < numLeds) {
           leds.forEach((led, index) => {
-            if (index === activeLight) {
-              led.classList.add("active");
-            } else {
-              led.classList.remove("active");
-            }
+            led.classList.toggle("active", index === activeLight);
           });
         }
       } catch (error) {
-        console.error("無法連線到 Firebase：", error);
+        console.warn("⚠️ 無法連線到 Firebase：", error);
       }
     }
 
@@ -132,16 +148,16 @@
           ledRing.style.display = "block";
           stopBtn.style.display = "inline-block";
 
-          // 每秒更新LED顯示
+          // 每 0.1 秒更新 LED 顯示
           window.ledInterval = setInterval(fetchLightData, 100);
         }
-      }, 100);
+      }, 1000);
     });
 
     // --- 停止復健 ---
     stopBtn.addEventListener("click", () => {
       clearInterval(window.ledInterval);
-      alert("Rehabilitation has been recorded");
+      alert("✅ Rehabilitation has been recorded");
       window.location.href = "index.html";
     });
 
