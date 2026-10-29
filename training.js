@@ -1,0 +1,23 @@
+'use strict';
+const $=id=>document.getElementById(id);
+let phase='idle',completed=0,target=12,stepMs=1200,started=null,sessionEvents=[];
+let countdownTimer=null,frame=null,remaining=0,segmentStart=0,cycleProgress=0,runElapsed=0,lastStart=0;
+function addEvent(message){sessionEvents.unshift({at:new Date().toLocaleTimeString('zh-TW',{hour12:false}),message});$('eventLog').replaceChildren(...sessionEvents.slice(0,30).map(e=>{const d=document.createElement('div');d.textContent=e.at+' · '+e.message;return d}));IRS.log(message)}
+const directions=[['上',0,-1],['右上',Math.SQRT1_2,-Math.SQRT1_2],['右',1,0],['右下',Math.SQRT1_2,Math.SQRT1_2],['下',0,1],['左下',-Math.SQRT1_2,Math.SQRT1_2],['左',-1,0],['左上',-Math.SQRT1_2,-Math.SQRT1_2]];
+function setCart(p){
+  const point=Math.min(.999999,Math.max(0,p))*8;
+  const index=Math.floor(point),part=point-index;
+  const radius=(part<=.5?part*2:(1-part)*2)*33.75;
+  const [name,dx,dy]=directions[index];
+  const cart=$('sliderCart');cart.style.left=(50+dx*radius)+'%';cart.style.top=(50+dy*radius)+'%';
+  $('direction').textContent='目前方向：'+name+'（'+(index+1)+'/8）';
+}
+function render(){const active=phase==='running'||phase==='paused';$('stateBadge').textContent=({idle:'待機中',countdown:'倒數準備',running:'進行中',paused:'已暫停',finished:'已完成'})[phase];$('phase').textContent=({idle:'READY',countdown:'STARTING',running:'RUNNING',paused:'PAUSED',finished:'DONE'})[phase];$('title').textContent=({idle:'準備開始',countdown:'即將開始',running:'復健進行中',paused:'已暫停',finished:'訓練結束'})[phase];$('counter').textContent=completed+' / '+target;$('percent').textContent=Math.round(completed/target*100)+'%';$('progress').style.width=(completed/target*100)+'%';$('startBtn').disabled=phase==='countdown'||active;$('pauseBtn').disabled=!active;$('pauseBtn').textContent=phase==='paused'?'繼續':'暫停';$('stopBtn').disabled=!(active||phase==='countdown');$('target').disabled=phase==='countdown'||active;$('speed').disabled=phase==='countdown'||active;if(phase==='idle'){$('countdown').textContent='準備開始';$('direction').textContent='目前方向：待機'}if(phase==='paused')$('countdown').textContent='已暫停';if(phase==='finished')$('countdown').textContent='本次訓練結束'}
+function cancelTimers(){clearInterval(countdownTimer);countdownTimer=null;if(frame!==null)cancelAnimationFrame(frame);frame=null}
+function finish(reason){if(!['running','paused','countdown'].includes(phase))return;if(phase==='running')runElapsed+=performance.now()-lastStart;cancelTimers();phase='finished';setCart(0);const record={id:IRS.safeId(),date:new Date().toISOString(),target,completed,durationSeconds:Math.max(0,Math.round(runElapsed/1000)),status:reason};const ok=IRS.saveSession(record);addEvent((reason==='completed'?'完成':'手動結束')+'：'+completed+'/'+target+' 次'+(ok?'，已存入本機':'，儲存失敗'));$('message').textContent=ok?'訓練紀錄已儲存。':'訓練已結束，但紀錄儲存失敗。';render()}
+function animate(now){if(phase!=='running')return;const elapsed=now-segmentStart;const cycleMs=stepMs*8;const total=cycleProgress*cycleMs+elapsed;const cycles=Math.floor(total/cycleMs);if(cycles>0){completed=Math.min(target,completed+cycles);cycleProgress=0;segmentStart=now-(total%cycleMs);render();if(completed>=target){finish('completed');return}}const progress=(total%cycleMs)/cycleMs;setCart(progress);$('countdown').textContent='八方向訓練中';frame=requestAnimationFrame(animate)}
+function resume(){phase='running';lastStart=performance.now();segmentStart=lastStart;addEvent('模擬訓練'+(completed||cycleProgress?'繼續':'開始'));$('message').textContent='滑車正在依序往八個方向移動。';render();frame=requestAnimationFrame(animate)}
+$('startBtn').addEventListener('click',()=>{const n=Number($('target').value);if(!Number.isInteger(n)||n<1||n>100){$('message').textContent='請輸入 1 至 100 的整數目標。';return}cancelTimers();target=n;completed=0;cycleProgress=0;runElapsed=0;started=Date.now();stepMs=Number($('speed').value);phase='countdown';setCart(0);let seconds=5;addEvent('開始五秒倒數，目標 '+target+' 次');render();$('countdown').textContent=seconds+' 秒';countdownTimer=setInterval(()=>{seconds--;$('countdown').textContent=seconds>0?seconds+' 秒':'開始！';if(seconds<=0){clearInterval(countdownTimer);countdownTimer=null;resume()}},1000)});
+$('pauseBtn').addEventListener('click',()=>{if(phase==='running'){const now=performance.now();runElapsed+=now-lastStart;cycleProgress=(cycleProgress+(now-segmentStart)/(stepMs*8))%1;cancelTimers();phase='paused';addEvent('模擬訓練暫停')}else if(phase==='paused')resume();render()});
+$('stopBtn').addEventListener('click',()=>finish('stopped'));
+window.addEventListener('pagehide',()=>{cancelTimers();if(['running','paused','countdown'].includes(phase))IRS.log('離開頁面，未完成的模擬訓練未儲存')});setCart(0);render();
